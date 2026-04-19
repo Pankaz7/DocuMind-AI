@@ -1,6 +1,9 @@
 const API_URL = "https://documind-ai-f3ax.onrender.com";
 // Button click + Enter key
 document.addEventListener("DOMContentLoaded", () => {
+  //  AUTO WAKE BACKEND
+  fetch(`${API_URL}/health`);
+  
   document.getElementById("sendBtn").addEventListener("click", sendMessage);
 
   document.getElementById("userInput").addEventListener("keypress", function (e) {
