@@ -1,3 +1,4 @@
+const API_URL = "https://documind-ai-f3ax.onrender.com";
 // Button click + Enter key
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("sendBtn").addEventListener("click", sendMessage);
@@ -35,7 +36,7 @@ async function sendMessage() {
   addMessage("Typing...", "bot");
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/chat", {
+    const res = await fetch(`${API_URL}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
