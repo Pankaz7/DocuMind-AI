@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -14,18 +15,19 @@ from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEndpointEmbeddings
 load_dotenv()
 app = FastAPI() 
-origins = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
-]
+
+#origins = [
+ #   "http://127.0.0.1:3000",
+ #   "http://localhost:3000",
+ #   "http://127.0.0.1:5500",
+# "http://localhost:5500",
+#] 
 
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,      # Allow specific origins
+    allow_origins=["*"],      # Allow specific origins
     allow_credentials=True,     # Allow cookies/auth headers
     allow_methods=["*"],        # Allow all methods (GET, POST, OPTIONS, etc.)
     allow_headers=["*"],        # Allow all headers
@@ -72,6 +74,8 @@ rag_chain = (
 class ChatRequest(BaseModel):
     question: str
 
+    
+
 @app.post("/chat")
 async def chat_with_bot(request: ChatRequest):
     try:
@@ -84,7 +88,11 @@ async def chat_with_bot(request: ChatRequest):
 def health():
     return {"status": "online", "model": "llama-3.3-70b-versatile"}
 
+@app.get("/")
+def home():
+    return {"message": "DocuMind AI Backend is running 🚀"}
+
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
